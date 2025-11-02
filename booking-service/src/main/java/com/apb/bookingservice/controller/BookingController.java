@@ -16,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -76,7 +74,7 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
-    public ResponseEntity<BookingDTO> getBookingBySalon(@PathVariable Long bookingId) throws Exception {
+    public ResponseEntity<BookingDTO> getBookingById(@PathVariable Long bookingId) throws Exception {
         Booking booking = bookingService.getBookingById(bookingId);
         return ResponseEntity.ok(BookingMapper.toDTO(booking));
     }
@@ -102,7 +100,7 @@ public class BookingController {
     }
 
     @GetMapping("/report")
-    public ResponseEntity<SalonReport> getBookingBySalon(@RequestHeader("Authorization") String jwt) throws Exception {
+    public ResponseEntity<SalonReport> getBookingById(@RequestHeader("Authorization") String jwt) throws Exception {
         SalonDTO salonDTO = salonFeignClient.getSalonsByOwnerId(jwt).getBody();
         SalonReport report = bookingService.getSalonReport(salonDTO.getId());
         return ResponseEntity.ok(report);
