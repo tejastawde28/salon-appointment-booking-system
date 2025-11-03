@@ -6,6 +6,7 @@ import com.apb.bookingservice.dto.SalonDTO;
 import com.apb.bookingservice.dto.ServiceDTO;
 import com.apb.bookingservice.dto.UserDTO;
 import com.apb.bookingservice.model.Booking;
+import com.apb.bookingservice.model.PaymentOrder;
 import com.apb.bookingservice.model.SalonReport;
 
 import java.time.LocalDate;
@@ -22,4 +23,5 @@ public interface BookingService {
     List<Booking> getBookingsByDate(LocalDate date, Long salonId);
     SalonReport getSalonReport(Long salonId);
     void deleteBooking(Long bookingId) throws Exception;
+    void confirmBooking(PaymentOrder order) throws Exception;
 }

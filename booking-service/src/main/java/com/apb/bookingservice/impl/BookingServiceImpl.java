@@ -6,6 +6,7 @@ import com.apb.bookingservice.dto.SalonDTO;
 import com.apb.bookingservice.dto.ServiceDTO;
 import com.apb.bookingservice.dto.UserDTO;
 import com.apb.bookingservice.model.Booking;
+import com.apb.bookingservice.model.PaymentOrder;
 import com.apb.bookingservice.model.SalonReport;
 import com.apb.bookingservice.repository.BookingRepository;
 import com.apb.bookingservice.service.BookingService;
@@ -149,6 +150,12 @@ public class BookingServiceImpl implements BookingService {
             throw new Exception("Booking with ID: "+ bookingId +" not found");
         }
         bookingRepository.delete(booking);
+    }
+
+    public void confirmBooking(PaymentOrder order) throws Exception {
+        Booking existingBooking = getBookingById(order.getBookingId());
+        existingBooking.setStatus(BookingStatus.CONFIRMED);
+        bookingRepository.save(existingBooking);
     }
 
 }

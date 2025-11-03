@@ -1,5 +1,7 @@
 package com.apb.paymentservice.impl;
 
+import com.apb.paymentservice.messaging.BookingEventProducer;
+import com.apb.paymentservice.messaging.NotificationEventProducer;
 import com.apb.paymentservice.model.PaymentMethod;
 import com.apb.paymentservice.model.PaymentOrder;
 import com.apb.paymentservice.model.PaymentOrderStatus;
@@ -22,6 +24,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentOrderRepository paymentOrderRepository;
+    private final BookingEventProducer bookingEventProducer;
+    private final NotificationEventProducer notificationEventProducer;
+
 
     @Value("${stripe.api.key}")
     private String stripeSecretKey;
@@ -98,6 +103,12 @@ public class PaymentServiceImpl implements PaymentService {
     public boolean proceedPayment(PaymentOrder order, String paymentId, String paymentUrlId) {
         if(order.getStatus().equals(PaymentOrderStatus.PENDING)){
             if(order.getPaymentMethod().equals(PaymentMethod.STRIPE)){
+                bookingEventProducer.sendBookingUpdateEvent(order);
+                notificationEventProducer.sendNotification(
+                        order.getBookingId(),
+                        order.getUserId(),
+                        order.getSalonId()
+                );
                 order.setStatus(PaymentOrderStatus.SUCCESS);
                 paymentOrderRepository.save(order);
                 return true;
