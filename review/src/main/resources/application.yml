@@ -1,0 +1,23 @@
+server:
+  port: 5008
+spring:
+  application:
+    name: review-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: teeSQL28
+    url: jdbc:mysql://localhost:3306/reviewdb?createDatabaseIfNotExist=true
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: "http://localhost:8070/eureka/"
